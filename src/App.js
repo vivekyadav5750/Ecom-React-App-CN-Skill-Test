@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import {  Routes, Route, BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 
-function App() {
+import store from "./store";
+import Navbar from "./components/navbar";
+import Product from "./pages/product";
+import AddProduct from "./pages/addProduct";
+import { ToastContainer } from "react-toastify";
+
+// function App() {
+//   return (
+//     // <Provider store={store}>
+//       <RouterProvider routes={router} />
+//     // </Provider>
+//   );
+// }
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<Product />} />
+          <Route path="addProduct" element={<AddProduct />} />
+        </Route>
+      </Routes>
+      <ToastContainer/>
+    </BrowserRouter>
+    </Provider>
   );
 }
 
-export default App;
+// export default App;
