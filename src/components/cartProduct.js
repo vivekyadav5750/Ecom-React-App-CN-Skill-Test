@@ -1,5 +1,6 @@
 import { FaStar } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function CartProduct({ Carts }) {
     console.log("Carts :: ", Carts);
@@ -7,6 +8,7 @@ export default function CartProduct({ Carts }) {
     const handleRemoveProduct = (index) => {
         console.log("index :: ", index);
         dispatch({type: "products/removeFromCart", payload: index});
+        toast.error("Product Removed from Cart");
     }
 
   return (
