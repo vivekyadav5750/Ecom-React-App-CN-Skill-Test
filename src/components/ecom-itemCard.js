@@ -74,7 +74,7 @@ export default function EcommItemCard({ products, sort }) {
   };
 
   const sortedProducts = sort
-    ? [...products].sort((a, b) => a.price - b.price)
+    ? [...products].sort((a, b) => (a.price) - (b.price))
     : products;
   console.log("sortedProducts :: ", sortedProducts);
 

@@ -22,7 +22,7 @@ export default function AddNewProduct() {
         const product = {
             title: name,
             description,
-            price,
+            price: parseInt(price),
             rating:{
                 rate: rating,
                 count: 0
