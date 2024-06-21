@@ -1,21 +1,18 @@
 import { FaStar } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-export default function ItemCard({ products, Carts }) {
-  const dispatch = useDispatch();
-
-  const handleAddToCart = (product) => {
-    dispatch({type: "products/addToCart", payload: product})
-    toast.success("Product Added to Cart");
-  };
+export default function CartProduct({ Carts }) {
+    console.log("Carts :: ", Carts);
+    const dispatch = useDispatch();
+    const handleRemoveProduct = (index) => {
+        console.log("index :: ", index);
+        dispatch({type: "products/removeFromCart", payload: index});
+    }
 
   return (
     <>
       <div className="flex flex-col w-full justify-center items-center bg- ">
-        {products.map((product, index) => (
+        {Carts.map((product, index) => (
           <div
             key={index}
             id={index}
@@ -49,19 +46,19 @@ export default function ItemCard({ products, Carts }) {
 
             {/* 2nd part of div list */}
             <div className="w-1/2 flex flex-row bg- pr-8  text-justify ">
-             
               {/*Actual Part  */}
-              <div className="space-y-3 w-full  h-24">
-                <div className="pr-2">{product.description}</div>
+              <div className="space-y-8 w-full  h-24">
+                <div className="pr-2">Qty : {product.quantity}</div>
 
-                <div className="flex flex-row justify-end  space-x-3 ">
-                  <button className="bg-green-600 text-white px-2 py-2 rounded-md shadow-md font-semibold hover:bg-green-400 hover:text-black" onClick={() => handleAddToCart(product)}>Add to Cart</button>
+                <div className="flex flex-row justify-start  ">
+                  <button className="bg-red-600 text-white px-2 py-2 rounded-md shadow-md font-semibold hover:bg-red-400 hover:text-black" onClick={() => handleRemoveProduct(index)}>
+                    Remove from Cart
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         ))}
-        
       </div>
     </>
   );

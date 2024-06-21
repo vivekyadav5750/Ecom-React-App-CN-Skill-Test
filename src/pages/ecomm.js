@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { fetchProducts, productSelector } from "../redux/productReducer";
 import { useSelector, useDispatch } from "react-redux";
-import ItemCard from "../components/itemCard";
+import EcommItemCard from "../components/ecom-itemCard";
+import Filter from "../components/filter";
 
-export default function Product() {
+export default function EcommProduct() {
   const dispatch = useDispatch();
-  const { products, loading, Carts } = useSelector(productSelector);
+  const { products, loading } = useSelector(productSelector);
+  const [sort, setSort] = useState(false);
 
   useEffect(() => {
     if (products.length === 0) {
@@ -23,7 +25,8 @@ export default function Product() {
         <Loader />
       ) : (
         <div className="bg-slate-300 p-10 flex flex-col">
-          <ItemCard products={products}  carts={Carts} />
+          <Filter sort={sort} setSort={setSort} />
+          <EcommItemCard products={products} sort={sort} />
         </div>
       )}
     </>

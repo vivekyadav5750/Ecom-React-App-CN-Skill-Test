@@ -1,9 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { buildCreateApi } from '@reduxjs/toolkit/query';
+import CartAddProduct from '../components/addNewProduct';
 
 const initialState = {
     products : [],
-    loading : true
+    loading : true,
+    Carts : [],
 }
 
 export const fetchProducts = createAsyncThunk(
@@ -20,8 +22,7 @@ const productSlice = createSlice({
     reducers : {
         addProduct : (state, action) => {
             console.log("action :: addProduct", action.payload);
-            // state.products.push(action.payload);
-            state.products = [...state.products, action.payload];
+            state.products = [...state.products, {...action.payload, id : state.products.length+1}];
             console.log("state.products :: ", state.products);
         },
         deleteProduct : (state, action) => {
@@ -38,6 +39,33 @@ const productSlice = createSlice({
                 return product;
             });
             console.log("state.products :: ", state.products);
+        },
+        addToCart : (state, action) => {
+            const isProductInCart = state.Carts.find((cart) => cart.id === action.payload.id);
+            // if there is already a product in cart then increase the quantity of that product by 1 else add the product to cart with quantity 1 
+            if(isProductInCart){
+                state.Carts = state.Carts.map((cart) => {
+                    if(cart.id === action.payload.id){
+                        return {...cart, quantity : cart.quantity + 1};
+                    }
+                    return cart;
+                });
+            }
+            else{
+                state.Carts = [...state.Carts, {...action.payload, quantity : 1}];
+            }          
+
+            console.log("state.Carts :: ", state.Carts);
+        },  
+        removeFromCart : (state, action) => {
+            // state.Carts = state.Carts.filter((cart, index) => index !== action.payload);
+            state.Carts = state.Carts.map((cart, index) => {
+                if(index === action.payload){
+                    return {...cart, quantity : cart.quantity - 1};
+                }
+                return cart;
+            }).filter((cart) => cart.quantity > 0);
+            console.log("state.Carts :: ", state.Carts);
         }
 
     },

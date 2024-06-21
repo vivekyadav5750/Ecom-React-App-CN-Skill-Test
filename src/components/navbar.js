@@ -15,7 +15,7 @@ export default function Navbar() {
             </li>
           </NavLink>
 
-          <NavLink to="/">
+          <NavLink to="/product">
             <li className="flex space-x-2 hover:bg-white hover:text-orange-600  rounded-md cursor-pointer">
               <span className="text-xl text-customPurple"> Products </span>
               {/* <GiWomanElfFace size={24} className="text-orange-600 " /> */}
@@ -30,7 +30,7 @@ export default function Navbar() {
           </NavLink>
         </ul>
 
-        <NavLink to="/" className="flex ">
+        <NavLink to="/cart" className="flex ">
           <h1 className="font-semibold flex space-x-2 hover:bg-white hover:text-orange-600  rounded-md cursor-pointer">
             <span className="text-xl text-customPurple"> Jhon Doe</span>
             <GiWomanElfFace size={24} className="text-orange-600 " />

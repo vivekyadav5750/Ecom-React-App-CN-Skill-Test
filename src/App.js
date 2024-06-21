@@ -6,6 +6,8 @@ import Navbar from "./components/navbar";
 import Product from "./pages/product";
 import AddProduct from "./pages/addProduct";
 import { ToastContainer } from "react-toastify";
+import EcommProduct from "./pages/ecomm";
+import Cart from "./pages/cart";
 
 // function App() {
 //   return (
@@ -21,8 +23,10 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navbar />}>
-          <Route index element={<Product />} />
+          <Route index element={<EcommProduct />} />
+          <Route path="product" element={<Product />} />
           <Route path="addProduct" element={<AddProduct />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
       </Routes>
       <ToastContainer/>

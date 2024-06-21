@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-export default function CartAddProduct() {
+export default function AddNewProduct() {
     const dispatch = useDispatch();
 
     const nameRef = useRef();
