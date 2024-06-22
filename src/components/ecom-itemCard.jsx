@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
+import { createRef } from "react";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,9 +11,22 @@ export default function EcommItemCard({ product, index }) {
   const notedit = "00000";
   const dispatch = useDispatch();
 
-  const [edit, setEdit] = useState(false);
   const [editMode, setEditMode] = useState(true);
   const [outlined, setOutlined] = useState("none");
+
+  // const [bg, setBg] = useState("bg-yellow-400");
+  // const [click, setClick] = useState(false);
+
+  // useEffect(() => {
+  //   console.log("click :: ", click);
+  //   console.log("bg :: ", bg);
+  //   setClick(false);
+  //   if (click) {
+  //     setBg("bg-orange-400");
+  //   } else {
+  //     setBg("bg-yellow-500");
+  //   }
+  // }, [click]);
 
   const handleDeleteClick = (index) => {
     dispatch({ type: "products/deleteProduct", payload: index });
@@ -45,7 +59,6 @@ export default function EcommItemCard({ product, index }) {
   };
 
   const handleEditClick = (index) => {
-    
     setEditMode(!editMode);
     if (editMode) {
       setOutlined("2");
@@ -53,8 +66,6 @@ export default function EcommItemCard({ product, index }) {
       setOutlined("none");
     }
   };
-
-
 
   return (
     <>
@@ -67,57 +78,27 @@ export default function EcommItemCard({ product, index }) {
         <div className="w-1/2 flex flex-row bg- space-x-8 ">
           <img src={product.image} className="w-24 h-24 " alt="product" />
 
-          {/* Editable Part */}
-          {edit && (
-            <div className="space-y-4 ">
-              <div>
-                <h3 className="font-semibold">
-                  <input
-                    defaultValue={product.title}
-                    className="w-96 border-2"
-                    autoFocus
-                    id={`${index}name`}
-                  />
-                </h3>
-                <p>
-                  Rs.{" "}
-                  <input
-                    defaultValue={product.price}
-                    className="w-12 border-2"
-                    id={`${index}price`}
-                  />
-                </p>
-              </div>
-              <div className="flex">
-                <p>
-                  <input
-                    defaultValue={product.rating.rate}
-                    className="w-10 border-2 "
-                    id={`${index}rate`}
-                  />
-                </p>
-              </div>
-            </div>
-          )}
-
           {/* Actual Part */}
-          {!edit && (
-            <div className={`space-y-4  ${notedit}`}>
-              <div>
+          <div className={`space-y-4  ${notedit}`}>
+            <div>
+              <input
+                // value={editMode ? product.title : undefined}
+                // defaultValue={editMode ? undefined : product.title}
+                defaultValue={product.title}
+                readOnly={editMode}
+                className={`font-semibold bg-transparent border-${outlined} focus:outline-none `} //disabled
+              />
+              <p>
+                Rs.{" "}
                 <input
-                  value={product.title}
+                  value={product.price}
                   readOnly={editMode}
-                  className={`font-semibold bg-transparent border-${outlined} focus:outline-none `} //disabled
+                  className={`border-${outlined} focus:outline-none w-2/5  `}
                 />
-                <p>
-                  Rs.{" "}
-                  <input
-                    value={product.price}
-                    readOnly={editMode}
-                    className={`border-${outlined} focus:outline-none w-2/5  `}
-                  />
-                </p>
-              </div>
+              </p>
+            </div>
+
+            {editMode ? (
               <div className="flex">
                 {Array(Math.floor(product.rating.rate))
                   .fill()
@@ -131,50 +112,31 @@ export default function EcommItemCard({ product, index }) {
                     <FaStar key={index} className="text-gray-500" />
                   ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex">
+                <p>
+                  <input
+                    defaultValue={product.rating.rate}
+                    className="w-10 border-2 "
+                    id={`${index}rate`}
+                  />
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* 2nd part of div list */}
         <div className="w-1/2 flex flex-row bg- pr-8  text-justify ">
-          {/* Editable Part */}
-          {edit && (
-            <div className="space-y-1 w-full h-24">
-              <textarea
-                defaultValue={product.description}
-                className="w-full h-16 resize-none border-2"
-                autoFocus
-                // name="myTextarea"
-                id={`${index}description`}
-              />
-
-              <div className="flex flex-row justify-end space-x-4 ">
-                <button
-                  className="bg-gray-500 text-white px-2 py-1  hover:bg-gray-400 rounded-md"
-                  onClick={() => setEdit(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-gray-500 text-white px-2 py-1 hover:bg-gray-400 rounded-md"
-                  onClick={() => handleSaveClick(index)}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          )}
-
           {/*Actual Part  */}
-          {!edit && (
-            <div className="space-y-3 w-full  h-24">
-              {/* <div className="pr-2">{product.description}</div> */}
-              <textarea
-                value={product.description}
-                readOnly={editMode}
-                className={`bg-transparent border-${outlined} w-full h-16 resize-none focus:outline-none`}
-              />
+          <div className="space-y-3 w-full  h-24">
+            <textarea
+              value={product.description}
+              readOnly={editMode}
+              className={`bg-transparent border-${outlined} w-full h-16 resize-none focus:outline-none`}
+            />
 
+            {editMode ? (
               <div className="flex flex-row justify-end  space-x-3 ">
                 <MdEdit
                   size={22}
@@ -187,8 +149,25 @@ export default function EcommItemCard({ product, index }) {
                   onClick={() => handleDeleteClick(index)}
                 />
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex flex-row justify-end space-x-4 ">
+                <button
+                  className="bg-gray-500 text-white px-2 py-1  hover:bg-gray-400 rounded-md"
+                  onClick={() => handleEditClick(index)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-2 py-1 hover:bg-gray-400 rounded-md"
+                  // className={bg}
+                  // onClick={() => setClick(!click)}
+                  onClick={() => handleSaveClick(index)}
+                >
+                  Save Click it
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
