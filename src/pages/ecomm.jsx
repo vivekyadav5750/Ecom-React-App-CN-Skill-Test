@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { fetchProducts, productSelector } from "../redux/productReducer";
 import { useSelector, useDispatch } from "react-redux";
-import EcommItemCard from "../components/ecom-itemCard";
 import Filter from "../components/filter";
+import EcommItemCard from "../components/ecom-itemCard";
 
 export default function EcommProduct() {
   const dispatch = useDispatch();
