@@ -11,6 +11,8 @@ export default function EcommItemCard({ product, index }) {
   const dispatch = useDispatch();
 
   const [edit, setEdit] = useState(false);
+  const [editMode, setEditMode] = useState(true);
+  const [outlined, setOutlined] = useState("none");
 
   const handleDeleteClick = (index) => {
     dispatch({ type: "products/deleteProduct", payload: index });
@@ -34,8 +36,6 @@ export default function EcommItemCard({ product, index }) {
       image: product.image,
     };
 
-    console.log("product :: ", updatedProduct);
-
     dispatch({
       type: "products/editProduct",
       payload: { index, updatedProduct },
@@ -43,6 +43,18 @@ export default function EcommItemCard({ product, index }) {
     setEdit(false);
     toast.success("Product Updated Successfully!");
   };
+
+  const handleEditClick = (index) => {
+    
+    setEditMode(!editMode);
+    if (editMode) {
+      setOutlined("2");
+    } else {
+      setOutlined("none");
+    }
+  };
+
+
 
   return (
     <>
@@ -92,8 +104,19 @@ export default function EcommItemCard({ product, index }) {
           {!edit && (
             <div className={`space-y-4  ${notedit}`}>
               <div>
-                <h3 className="font-semibold">{product.title}</h3>
-                <p>Rs. {product.price}</p>
+                <input
+                  value={product.title}
+                  readOnly={editMode}
+                  className={`font-semibold bg-transparent border-${outlined} focus:outline-none `} //disabled
+                />
+                <p>
+                  Rs.{" "}
+                  <input
+                    value={product.price}
+                    readOnly={editMode}
+                    className={`border-${outlined} focus:outline-none w-2/5  `}
+                  />
+                </p>
               </div>
               <div className="flex">
                 {Array(Math.floor(product.rating.rate))
@@ -145,13 +168,18 @@ export default function EcommItemCard({ product, index }) {
           {/*Actual Part  */}
           {!edit && (
             <div className="space-y-3 w-full  h-24">
-              <div className="pr-2">{product.description}</div>
+              {/* <div className="pr-2">{product.description}</div> */}
+              <textarea
+                value={product.description}
+                readOnly={editMode}
+                className={`bg-transparent border-${outlined} w-full h-16 resize-none focus:outline-none`}
+              />
 
               <div className="flex flex-row justify-end  space-x-3 ">
                 <MdEdit
                   size={22}
                   className="text-yellow-600 cursor-pointer"
-                  onClick={() => setEdit(true)}
+                  onClick={() => handleEditClick(index)}
                 />
                 <MdDeleteForever
                   size={22}
