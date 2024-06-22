@@ -79,7 +79,7 @@ export default function EcommProductsCard({ products, sort }) {
     <>
       <div className="flex flex-col w-full justify-center items-center bg- ">
         {sortedProducts.map((product, index) => (
-          <EcommItemCard product={product} index={index} key={index} />
+          <EcommItemCard data={product} index={index} key={index} />
         ))}
       </div>
     </>

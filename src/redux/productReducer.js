@@ -1,6 +1,4 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { buildCreateApi } from '@reduxjs/toolkit/query';
-import CartAddProduct from '../components/addNewProduct';
 
 const initialState = {
     products : [],
@@ -32,8 +30,8 @@ const productSlice = createSlice({
         },
         editProduct : (state, action) => {
             console.log("action :: editProduct", action.payload);
-            state.products = state.products.map((product, index) => {
-                if(index === action.payload.index){
+            state.products = state.products.map((product) => {
+                if(product.id === action.payload.id){
                     return action.payload.updatedProduct;
                 }
                 return product;

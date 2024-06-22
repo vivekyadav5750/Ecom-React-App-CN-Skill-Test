@@ -1,71 +1,49 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { createRef } from "react";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function EcommItemCard({ product, index }) {
-  const notedit = "00000";
+export default function EcommItemCard({ data, index }) {
   const dispatch = useDispatch();
 
-  const [editMode, setEditMode] = useState(true);
-  const [outlined, setOutlined] = useState("none");
-
-  // const [bg, setBg] = useState("bg-yellow-400");
-  // const [click, setClick] = useState(false);
-
-  // useEffect(() => {
-  //   console.log("click :: ", click);
-  //   console.log("bg :: ", bg);
-  //   setClick(false);
-  //   if (click) {
-  //     setBg("bg-orange-400");
-  //   } else {
-  //     setBg("bg-yellow-500");
-  //   }
-  // }, [click]);
+  const [editMode, setEditMode] = useState(false);
+  const [product, setProduct] = useState(data);
 
   const handleDeleteClick = (index) => {
     dispatch({ type: "products/deleteProduct", payload: index });
     toast.error("Product Deleted Successfully!");
   };
 
-  const handleSaveClick = (index) => {
-    const title = document.getElementById(`${index}name`);
-    const price = document.getElementById(`${index}price`);
-    const rate = document.getElementById(`${index}rate`);
-    const description = document.getElementById(`${index}description`);
-
-    const updatedProduct = {
-      title: title.value,
-      price: parseInt(price.value),
-      rating: {
-        rate: rate.value,
-        count: 0,
-      },
-      description: description.value,
-      image: product.image,
-    };
-
+  const handleSaveClick = () => {
     dispatch({
       type: "products/editProduct",
-      payload: { index, updatedProduct },
+      payload: { id: product.id, updatedProduct: product },
     });
-    setEdit(false);
     toast.success("Product Updated Successfully!");
+    setEditMode(false);
   };
 
-  const handleEditClick = (index) => {
-    setEditMode(!editMode);
-    if (editMode) {
-      setOutlined("2");
-    } else {
-      setOutlined("none");
-    }
+  const handleOnChange = (e) => {
+    setProduct({ ...product, [e.target.name]: e.target.value });
   };
+
+  /**This function handle cancel button click.
+   * If cancel clicked then:-
+   * 1. setEditMode to false
+   * 2. setProduct to data (original data)
+   */
+  const handleCancelClick = () => {
+    setEditMode(false);
+    setProduct(data);
+  };
+
+  useEffect(() => {
+    setProduct(data);
+  }, [data]);
 
   return (
     <>
@@ -79,26 +57,32 @@ export default function EcommItemCard({ product, index }) {
           <img src={product.image} className="w-24 h-24 " alt="product" />
 
           {/* Actual Part */}
-          <div className={`space-y-4  ${notedit}`}>
+          <div className={`space-y-4`}>
             <div>
               <input
-                // value={editMode ? product.title : undefined}
-                // defaultValue={editMode ? undefined : product.title}
-                defaultValue={product.title}
-                readOnly={editMode}
-                className={`font-semibold bg-transparent border-${outlined} focus:outline-none `} //disabled
+                value={product.title}
+                readOnly={!editMode}
+                name="title"
+                onChange={handleOnChange}
+                className={`${
+                  editMode ? "border-2" : "border-none"
+                } font-semibold bg-transparent focus:outline-none `}
               />
               <p>
                 Rs.{" "}
                 <input
                   value={product.price}
-                  readOnly={editMode}
-                  className={`border-${outlined} focus:outline-none w-2/5  `}
+                  onChange={handleOnChange}
+                  name="price"
+                  readOnly={!editMode}
+                  className={`${
+                    editMode ? "border-2" : "border-none"
+                  } focus:outline-none w-2/5  `}
                 />
               </p>
             </div>
 
-            {editMode ? (
+            {!editMode ? (
               <div className="flex">
                 {Array(Math.floor(product.rating.rate))
                   .fill()
@@ -132,16 +116,20 @@ export default function EcommItemCard({ product, index }) {
           <div className="space-y-3 w-full  h-24">
             <textarea
               value={product.description}
-              readOnly={editMode}
-              className={`bg-transparent border-${outlined} w-full h-16 resize-none focus:outline-none`}
+              readOnly={!editMode}
+              name="description"
+              onChange={handleOnChange}
+              className={`bg-transparent ${
+                editMode ? "border-2" : "border-none"
+              } w-full h-16 resize-none focus:outline-none`}
             />
 
-            {editMode ? (
+            {!editMode ? (
               <div className="flex flex-row justify-end  space-x-3 ">
                 <MdEdit
                   size={22}
                   className="text-yellow-600 cursor-pointer"
-                  onClick={() => handleEditClick(index)}
+                  onClick={() => setEditMode(true)}
                 />
                 <MdDeleteForever
                   size={22}
@@ -153,7 +141,7 @@ export default function EcommItemCard({ product, index }) {
               <div className="flex flex-row justify-end space-x-4 ">
                 <button
                   className="bg-gray-500 text-white px-2 py-1  hover:bg-gray-400 rounded-md"
-                  onClick={() => handleEditClick(index)}
+                  onClick={handleCancelClick}
                 >
                   Cancel
                 </button>
@@ -161,7 +149,7 @@ export default function EcommItemCard({ product, index }) {
                   className="bg-gray-500 text-white px-2 py-1 hover:bg-gray-400 rounded-md"
                   // className={bg}
                   // onClick={() => setClick(!click)}
-                  onClick={() => handleSaveClick(index)}
+                  onClick={handleSaveClick}
                 >
                   Save Click it
                 </button>
