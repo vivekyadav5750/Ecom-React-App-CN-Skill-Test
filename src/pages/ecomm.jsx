@@ -3,7 +3,7 @@ import Loader from "../components/Loader";
 import { fetchProducts, productSelector } from "../redux/productReducer";
 import { useSelector, useDispatch } from "react-redux";
 import Filter from "../components/filter";
-import EcommItemCard from "../components/ecom-itemCard";
+import EcommProductsCard from "../components/ecom-productsCard";
 
 export default function EcommProduct() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function EcommProduct() {
       ) : (
         <div className="bg-slate-300 p-10 flex flex-col">
           <Filter sort={sort} setSort={setSort} />
-          <EcommItemCard products={products} sort={sort} />
+          <EcommProductsCard products={products} sort={sort} />
         </div>
       )}
     </>

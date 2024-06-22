@@ -34,7 +34,7 @@ const productSlice = createSlice({
             console.log("action :: editProduct", action.payload);
             state.products = state.products.map((product, index) => {
                 if(index === action.payload.index){
-                    return action.payload.product;
+                    return action.payload.updatedProduct;
                 }
                 return product;
             });
