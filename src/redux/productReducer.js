@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+=======
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+>>>>>>> 64669316b5c156120d7027946ad2762a32aba947
 
 const initialState = {
   products: [],
@@ -17,6 +21,7 @@ export const fetchProducts = createAsyncThunk(
 );
 
 const productSlice = createSlice({
+<<<<<<< HEAD
   name: "products",
   initialState,
   reducers: {
@@ -27,6 +32,59 @@ const productSlice = createSlice({
         { ...action.payload, id: state.products.length + 1 },
       ];
       console.log("state.products :: ", state.products);
+=======
+    name : 'products',
+    initialState,
+    reducers : {
+        addProduct : (state, action) => {
+            console.log("action :: addProduct", action.payload);
+            state.products = [...state.products, {...action.payload, id : state.products.length+1}];
+            console.log("state.products :: ", state.products);
+        },
+        deleteProduct : (state, action) => {
+            console.log("action :: deleteProduct", action.payload);
+            state.products = state.products.filter((product, index) => index !== action.payload);
+            console.log("state.products :: ", state.products);
+        },
+        editProduct : (state, action) => {
+            console.log("action :: editProduct", action.payload);
+            state.products = state.products.map((product) => {
+                if(product.id === action.payload.id){
+                    return action.payload.updatedProduct;
+                }
+                return product;
+            });
+            console.log("state.products :: ", state.products);
+        },
+        addToCart : (state, action) => {
+            const isProductInCart = state.Carts.find((cart) => cart.id === action.payload.id);
+            // if there is already a product in cart then increase the quantity of that product by 1 else add the product to cart with quantity 1 
+            if(isProductInCart){
+                state.Carts = state.Carts.map((cart) => {
+                    if(cart.id === action.payload.id){
+                        return {...cart, quantity : cart.quantity + 1};
+                    }
+                    return cart;
+                });
+            }
+            else{
+                state.Carts = [...state.Carts, {...action.payload, quantity : 1}];
+            }          
+
+            console.log("state.Carts :: ", state.Carts);
+        },  
+        removeFromCart : (state, action) => {
+            // state.Carts = state.Carts.filter((cart, index) => index !== action.payload);
+            state.Carts = state.Carts.map((cart, index) => {
+                if(index === action.payload){
+                    return {...cart, quantity : cart.quantity - 1};
+                }
+                return cart;
+            }).filter((cart) => cart.quantity > 0);
+            console.log("state.Carts :: ", state.Carts);
+        }
+
+>>>>>>> 64669316b5c156120d7027946ad2762a32aba947
     },
     deleteProduct: (state, action) => {
       console.log("action :: deleteProduct", action.payload);
